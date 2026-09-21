@@ -90,19 +90,12 @@ function renderMap() {
     if (p.status === 'attackable') {
       el.onclick = () => confirmAttack(p);
     } else if (p.status === 'owned') {
-      el.onclick = () => showModal(p.name, `治所：${p.capital}。此州已在治下，每时产银 ${prodText(p, 'silver')}、粮 ${prodText(p, 'grain')}、兵 ${prodText(p, 'troops')}。`, null);
+      el.onclick = () => showModal(p.name, `治所：${p.capital}。此州已在治下，每时产银 ${p.prod.silver}、粮 ${p.prod.grain}、兵 ${p.prod.troops}。`, null);
     } else {
       el.onclick = () => toast('此州与治下不相邻，暂不可征讨');
     }
     grid.appendChild(el);
   }
-}
-
-function prodText(province, key) {
-  const v = 1; // 1 小时
-  const sBase = 20, gBase = 15, tBase = 2;
-  const map = { silver: Math.floor((sBase + province.reward / 5) * v), grain: Math.floor((gBase + province.reward / 5) * v), troops: Math.floor((tBase + province.reward / 40) * v) };
-  return map[key];
 }
 
 function confirmAttack(p) {
@@ -287,7 +280,8 @@ async function enterGame() {
     showView('game');
     switchTab('home');
     await refreshAll();
-    setInterval(async () => {
+    if (window.__sgTimer) clearInterval(window.__sgTimer);
+    window.__sgTimer = setInterval(async () => {
       try { await loadState(); refreshAll(); } catch (e) { /* 静默 */ }
     }, 60000);
     return true;
