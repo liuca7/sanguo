@@ -74,13 +74,24 @@ async function refreshPlayer(db, player, vars) {
 }
 
 // ==================== 状态组装 ====================
-function buildMap(ownedProvinceIds) {
+function buildMap(ownedProvinceIds, vars = {}) {
   const owned = new Set(ownedProvinceIds);
+  const sBase = Number(vars.SILVER_PER_PROVINCE_PER_HOUR) || 20;
+  const gBase = Number(vars.GRAIN_PER_PROVINCE_PER_HOUR) || 15;
+  const tBase = Number(vars.TROOPS_PER_PROVINCE_PER_HOUR) || 2;
   return PROVINCES.map((p) => {
     let status = 'locked';
     if (owned.has(p.id)) status = 'owned';
     else if (p.neighbors.some((n) => owned.has(n))) status = 'attackable';
-    return { ...p, status };
+    return {
+      ...p,
+      status,
+      prod: {
+        silver: Math.floor(sBase + p.reward / 5),
+        grain: Math.floor(gBase + p.reward / 5),
+        troops: Math.floor(tBase + p.reward / 40),
+      },
+    };
   });
 }
 
@@ -114,7 +125,7 @@ async function getFullState(db, playerId, vars) {
     },
     generals: generals.results,
     battles: battles.results,
-    map: buildMap(provinces),
+    map: buildMap(provinces, vars),
     victory: provinces.length >= PROVINCES.length,
   };
 }
@@ -199,8 +210,14 @@ async function handleAction(env, body) {
     // 武将忠诚结算
     const loyalty = applyMoraleAndLoyalty(generals, result.win);
     const desertIds = [];
+    const surviveIds = [];
     for (const g of generals) {
       if (g.loyalty < 20) desertIds.push(g.id);
+      else surviveIds.push(g);
+    }
+    // 持久化：存活武将的新忠诚写回，弃主武将删除
+    for (const g of surviveIds) {
+      await db.prepare('UPDATE generals SET loyalty=? WHERE id=?').bind(g.loyalty, g.id).run();
     }
     if (desertIds.length) {
       await db.prepare(`DELETE FROM generals WHERE id IN (${desertIds.map(() => '?').join(',')})`).bind(...desertIds).run();
