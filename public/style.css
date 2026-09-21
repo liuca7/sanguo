@@ -261,11 +261,11 @@ html, body {
   display: grid;
   grid-template-areas:
     "youzhou  youzhou   jizhou   jizhou   qingzhou"
-    "bingzhou bingzhou  sili     yanzhou  qingzhou"
-    "liangzhou liangzhou sili     yanzhou  xuzhou"
-    "liangzhou liangzhou yuzhou   yuzhou   xuzhou"
-    "yizhou    yizhou    jingzhou jingzhou yangzhou"
-    "yizhou    jiaozhou  jiaozhou jiaozhou yangzhou";
+    "bingzhou bingzhou  sili     yanzhou  xuzhou"
+    "bingzhou bingzhou  sili     yanzhou  yuzhou"
+    "liangzhou liangzhou jingzhou jingzhou yuzhou"
+    "liangzhou liangzhou jingzhou jingzhou yangzhou"
+    "yizhou   yizhou    jiaozhou jiaozhou yangzhou";
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
 }
