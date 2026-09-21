@@ -5,7 +5,7 @@
 
 name = "sanguo"
 main = "src/index.js"
-compatibility_date = "2024-11-06"
+compatibility_date = "2026-09-21"
 compatibility_flags = ["nodejs_compat"]
 
 # ---------- 静态资源（前端页面） ----------
@@ -34,7 +34,7 @@ PRODUCTION_HOURS_CAP = "12"          # 离线产出最多累计小时数
 [[d1_databases]]
 binding = "DB"
 database_name = "sanguo-db"
-database_id = "PASTE_YOUR_D1_DATABASE_ID_HERE"
+database_id = "10a39389-5e4a-4acb-8772-53a85c9bb662"
 
 # ---------- 可观测性（免费额度内） ----------
 [observability]
