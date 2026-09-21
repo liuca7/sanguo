@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>三国霸业 · 问鼎中原</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%238c1f28'/%3E%3Ctext x='32' y='44' font-size='36' text-anchor='middle' fill='%23e8d5a3' font-family='serif'%3E%E4%B8%89%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ 登录 / 注册 ============ -->
+  <section id="login-view" class="view hidden">
+    <div class="login-box">
+      <div class="seal">汉</div>
+      <h1 class="game-title">三国霸业</h1>
+      <p class="subtitle">汉室倾颓 · 群雄并起 · 问鼎中原</p>
+      <input id="player-name" class="input" maxlength="12" placeholder="请输入主公名号，如：曹孟德" autocomplete="off" />
+      <button id="btn-register" class="btn btn-primary btn-lg">出 山</button>
+      <p id="login-error" class="error hidden"></p>
+    </div>
+  </section>
+
+  <!-- ============ 游戏主界面 ============ -->
+  <section id="game-view" class="view hidden">
+    <header class="topbar">
+      <div class="brand">三国霸业<span id="lord-name" class="lord-name"></span></div>
+      <div class="res-row">
+        <span class="res res-silver">银两 <b id="r-silver">0</b></span>
+        <span class="res res-grain">粮草 <b id="r-grain">0</b></span>
+        <span class="res res-troops">兵力 <b id="r-troops">0</b></span>
+        <span class="res res-morale">士气 <b id="r-morale">0</b></span>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="home">主城</button>
+      <button class="tab" data-tab="map">天下</button>
+      <button class="tab" data-tab="generals">武将</button>
+      <button class="tab" data-tab="logs">战报</button>
+      <button class="tab" data-tab="rank">排行</button>
+    </nav>
+
+    <main class="main">
+      <!-- 主城 -->
+      <div id="tab-home" class="tab-page">
+        <div class="hero-banner">
+          <h2 id="home-greeting">主公，欢迎归来</h2>
+          <p id="home-progress">已据 <b>1</b>/13 州 · 距一统天下尚远</p>
+          <div class="progress-track"><div id="home-progress-bar" class="progress-bar"></div></div>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h3>资源产出 <small>（每小时）</small></h3>
+            <ul class="kv">
+              <li><span>银两</span><b id="p-silver">0</b></li>
+              <li><span>粮草</span><b id="p-grain">0</b></li>
+              <li><span>兵力</span><b id="p-troops">0</b></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>治所</h3>
+            <p class="capital" id="home-capital">许昌</p>
+            <ul class="kv">
+              <li><span>已占州郡</span><b id="home-count">1</b></li>
+              <li><span>麾下武将</span><b id="home-generals">0</b></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>军务</h3>
+            <button class="btn btn-primary btn-block" id="btn-train">练兵（100银 + 80粮 → 100兵）</button>
+            <button class="btn btn-gold btn-block" id="btn-recruit-home">招募武将</button>
+          </div>
+        </div>
+        <div class="notice" id="home-notice"></div>
+      </div>
+
+      <!-- 天下 -->
+      <div id="tab-map" class="tab-page">
+        <p class="page-tip">★ 已占领　◆ 可攻打的相邻州　· 其余州郡暂不可达</p>
+        <div id="map-grid" class="map-grid"></div>
+      </div>
+
+      <!-- 武将 -->
+      <div id="tab-generals" class="tab-page">
+        <div class="row-between">
+          <h3>麾下武将（<span id="gen-count">0</span>）</h3>
+          <button class="btn btn-gold" id="btn-recruit">招募武将</button>
+        </div>
+        <div id="gen-list" class="gen-list"></div>
+      </div>
+
+      <!-- 战报 -->
+      <div id="tab-logs" class="tab-page">
+        <h3>军情战报</h3>
+        <ul id="battle-list" class="battle-list"></ul>
+      </div>
+
+      <!-- 排行 -->
+      <div id="tab-rank" class="tab-page">
+        <h3>天下英豪榜</h3>
+        <table class="rank-table">
+          <thead><tr><th>名次</th><th>主公</th><th>州郡</th><th>兵力</th><th>银两</th></tr></thead>
+          <tbody id="rank-body"></tbody>
+        </table>
+      </div>
+    </main>
+  </section>
+</div>
+
+<!-- 弹窗 -->
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <h3 id="modal-title">提示</h3>
+    <div id="modal-body" class="modal-body"></div>
+    <button class="btn btn-primary btn-block" id="modal-ok">确 定</button>
+  </div>
+</div>
+
+<!-- 轻提示 -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "sanguo",
+  "version": "1.0.0",
+  "description": "三国霸业 · Cloudflare 全栈策略游戏（Workers 静态资源 + API + D1）",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute sanguo-db --remote --file=./db/schema.sql",
+    "db:init:local": "wrangler d1 execute sanguo-db --local --file=./db/schema.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

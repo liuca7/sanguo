@@ -1,0 +1,41 @@
+# ============================================================
+# 三国霸业 · Cloudflare Workers 部署配置
+# 全部环境变量集中在下方 [vars] 与 [[d1_databases]] 中
+# ============================================================
+
+name = "sanguo"
+main = "src/index.js"
+compatibility_date = "2024-11-06"
+compatibility_flags = ["nodejs_compat"]
+
+# ---------- 静态资源（前端页面） ----------
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# ---------- 环境变量（游戏配置） ----------
+[vars]
+APP_NAME = "三国霸业"
+BASE_SILVER = "1500"        # 初始银两
+BASE_GRAIN = "1500"         # 初始粮草
+BASE_TROOPS = "500"         # 初始兵力
+BASE_MORALE = "100"         # 初始士气
+TRAIN_COST_SILVER = "100"   # 练兵：每次消耗银两
+TRAIN_COST_GRAIN = "80"     # 练兵：每次消耗粮草
+TRAIN_GAIN_TROOPS = "100"   # 练兵：每次新增兵力
+SILVER_PER_PROVINCE_PER_HOUR = "20"  # 每州每小时基础产银
+GRAIN_PER_PROVINCE_PER_HOUR = "15"   # 每州每小时基础产粮
+TROOPS_PER_PROVINCE_PER_HOUR = "2"   # 每州每小时基础募兵
+PRODUCTION_HOURS_CAP = "12"          # 离线产出最多累计小时数
+
+# ---------- D1 数据库 ----------
+# 1. 先执行:  wrangler d1 create sanguo-db
+# 2. 把输出的 database_id 粘贴到下面（这是唯一的占位符，其余配置都已就绪）
+[[d1_databases]]
+binding = "DB"
+database_name = "sanguo-db"
+database_id = "PASTE_YOUR_D1_DATABASE_ID_HERE"
+
+# ---------- 可观测性（免费额度内） ----------
+[observability]
+enabled = true
