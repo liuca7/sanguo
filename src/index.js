@@ -1,7 +1,7 @@
 /**
  * 三国霸业 · Cloudflare Worker 入口
  * 路由：
- *   /api/register   POST  注册主公
+ *   /api/register   POST  注册主公（名号已存在则直接登录继续）
  *   /api/state      POST  获取完整游戏状态（自动结算离线产出）
  *   /api/action     POST  执行动作（练兵 / 招募 / 攻城）
  *   /api/leaderboard GET  天下排行榜
@@ -234,13 +234,13 @@ export default {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
 
-    // 注册
+    // 注册 / 登录（无密码：名号即账号，已存在则直接回到旧档）
     if (url.pathname === '/api/register' && request.method === 'POST') {
       const body = await readJson(request);
       const name = String(body?.name || '').trim().slice(0, 12);
       if (!name) return fail('请留下主公名号');
-      const dup = await env.DB.prepare('SELECT id FROM players WHERE name=?').bind(name).first();
-      if (dup) return fail('此名号已被占据，另择名号吧', 409);
+      const dup = await env.DB.prepare('SELECT id, name FROM players WHERE name=?').bind(name).first();
+      if (dup) return ok({ playerId: dup.id, name: dup.name, resumed: true });
       const now = Date.now();
       const res = await env.DB
         .prepare('INSERT INTO players (name, silver, grain, troops, morale, capital, provinces, last_updated, created_at) VALUES (?,?,?,?,?,?,?,?,?)')
